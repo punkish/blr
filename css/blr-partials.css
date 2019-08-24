@@ -1,0 +1,11 @@
+/*****************************************/
+/* blr: partials                         */
+/*****************************************/
+
+.crit-key {
+    font-weight: bold;
+}
+.crit-val {
+    font-style: italic;
+    font-family: serif;
+}

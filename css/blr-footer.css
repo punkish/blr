@@ -1,0 +1,13 @@
+/*****************************************/
+/* blr: footer                           */
+/*****************************************/
+
+footer {
+    text-align: center;
+    padding: 0 !important;
+}
+footer img {
+    width: 80%;
+    max-width: 480px;
+    margin: auto;
+}

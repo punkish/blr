@@ -1,0 +1,20 @@
+/*****************************************/
+/* blr: article                          */
+/*****************************************/
+
+article {
+    flex: 1 1 0%;
+    padding: 1rem;
+    width: 100%;
+    max-width: 960px;
+}
+article section {
+    padding: 2rem;
+}
+article section p {
+    text-align: left;
+}
+.js-tabs {
+    width: 100%;
+    margin: 0;
+}

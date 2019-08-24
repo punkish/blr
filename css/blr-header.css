@@ -1,0 +1,19 @@
+/*****************************************/
+/* blr: base styles                      */
+/*****************************************/
+
+header {
+    background-color: #f5f5f5;
+}
+
+header a.title {
+    color: black;
+    text-decoration: none;
+    font-size: 4rem;
+    line-height: 0;
+    margin-top: 2rem;
+}
+
+header a.sub-title {
+    margin-top: 0;  
+}
