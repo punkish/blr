@@ -66,6 +66,7 @@ BLR.treatments.getOneTreatment = function(uri, search) {
 
                 BLR.eventlisteners.toggle(BLR.base.dom.throbber, 'off');
                 BLR.eventlisteners.toggle(BLR.base.dom.treatments, 'on');
+                BLR.base.map.leaflet.invalidateSize();
             }
 
         });
@@ -131,8 +132,7 @@ BLR.treatments.getManyTreatments = function(uri, search) {
 
             BLR.eventlisteners.toggle(BLR.base.dom.throbber, 'off');
             BLR.eventlisteners.toggle(BLR.base.dom.treatments, 'on');
-            //BLR.base.map.leaflet.invalidateSize();
-
+            
         });
 };
 
@@ -160,10 +160,10 @@ BLR.treatments.makeMap = function(points) {
         scrollWheelZoom: false
     });
 
-    const tiles = L.tileLayer(BLR.map.url, {
+    const tiles = L.tileLayer(BLR.base.map.url, {
         attribution: BLR.base.map.attribution,
         maxZoom: 18,
-        id: BLR.map.id,
+        id: BLR.base.map.id,
         accessToken: BLR.base.map.accessToken
     }).addTo(BLR.base.map.leaflet);
 
@@ -172,15 +172,17 @@ BLR.treatments.makeMap = function(points) {
     points.forEach(p => {
         if (typeof(p.latitude) === 'number' && typeof(p.longitude) === 'number') {
 
-            const title = mc.treatmentTitle;
+            const title = points.treatmentTitle;
             
-            const marker = L.marker([mc.latitude, mc.longitude]).addTo(mcmap);
-            marker.bindPopup(mc.typeStatus + '<br>' + title);
+            const marker = L.marker([p.latitude, p.longitude]).addTo(BLR.base.map.leaflet);
+            marker.bindPopup(p.typeStatus + '<br>' + title);
             markers.push(marker)
         }
     });
 
-    BLR.base.map.leaflet.addLayer(markers);
+    const bounds = new L.featureGroup(markers).getBounds();
+    BLR.base.map.leaflet.fitBounds(bounds);
+   //BLR.base.map.leaflet.addLayer(markers);
     
     
 
