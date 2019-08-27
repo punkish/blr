@@ -8,79 +8,67 @@
     <meta name="author" content="Puneet Kishor">
     <meta name="copyright" content="CC0 Public Domain Dedication">
 
-    <title>ocellus^3</title>
-
-    <link rel="icon" type="image/png" href="Barebones-3.0.1/images/favicon-16.png">
-
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css" integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ==" crossorigin=""/>
+    <meta http-equiv="Cache-Control" content="max-age=604800, public">
     
-    <link rel="stylesheet" href="css/styles.min.css">
+    <title>Biodiversity Literature Repository</title>
+    
+    <link rel="icon" type="image/png" href="img/ocellus.png">
+
+    <link rel="stylesheet" href="Barebones-3.0.1/css/normalize.css">
+    <link rel="stylesheet" href="Barebones-3.0.1/css/barebones.css">
+    <link rel="stylesheet" href="Barebones-3.0.1/css/skeleton-legacy.css">
+
+    <link rel="stylesheet" href="node_modules/chart.js/dist/Chart.min.css">
+    <link rel="stylesheet" href="JavaScript-autoComplete/auto-complete.css">
+    <link rel="stylesheet" href="node_modules/tabbyjs/dist/css/tabby-ui.min.css">
+
+    <!-- 
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css" integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ==" crossorigin=""/> 
+    -->
+    <link rel="stylesheet" href="node_modules/leaflet/dist/leaflet.css">
+
+    <link rel="stylesheet" href="css/blr-base.css">
+    <link rel="stylesheet" href="css/blr-header.css">
+    <link rel="stylesheet" href="css/blr-article.css">
+    <link rel="stylesheet" href="css/blr-simple-search.css">
+    <link rel="stylesheet" href="css/blr-community-select-boxes.css">
+    <link rel="stylesheet" href="css/blr-footer.css">
+    <link rel="stylesheet" href="css/blr-throbber.css">
+    <link rel="stylesheet" href="css/blr-treatment.css">
+    <link rel="stylesheet" href="css/blr-treatments.css">
+    <link rel="stylesheet" href="css/blr-media-queries.css">
+    <link rel="stylesheet" href="css/blr-about.css">
+    <link rel="stylesheet" href="css/blr-partials.css">
+    <link rel="stylesheet" href="css/blr-images.css">
+    <link rel="stylesheet" href="css/blr-xml.css">
+    <link rel="stylesheet" href="css/blr-taxon-tree.css">
+    <link rel="stylesheet" href="css/blr-pager.css">
+    <link rel="stylesheet" href="css/blr-tabby.css">
 </head>
 <body>
 
-<header>
-    <div>
-        <div class="title">
-            <div>
-                <a href="/" class="main-title">Ocellus<sup>3</sup></a><br>
-                <a href="#about" class="modal-open sub-title">about</a>
+<header class="hidden">
+    <div class="container">
+        <div class="row">
+            <div id="headerTitleContainer" class="columns two">
+                <a href="/" class="title logo-header"></a><br>
+                <a href="about.html#on" class="modal-open sub-title">about</a>
             </div>
+            <div id="headerFormContainer" class="columns ten"></div>
         </div>
-
-        <form name="simpleSearch" class="searchContainer" id="ssForm" method="GET">
-            <nav id="resourceSelector">
-                <label for="resource-treatments" class="searchFocus">treatments</label>
-                <input id="resource-treatments" class="urlFlag" type="radio" name="resource" value="treatments" checked=true>
-
-                <!-- <label for="resource-materials-citations">materials citations</label>
-                <input id="resource-materials-citations" class="urlFlag" type="radio" name="resource" value="materialsCitations"> -->
-
-                <!-- <label for="resource-images">images</label>
-                <input id="resource-images" class="urlFlag" type="radio" name="resource" value="images"> -->
-            </nav>
-
-            <div id="sSearch" class="searchWidget">
-                <div class="drop-down">
-                    <div class="arrow-down" data-tooltip="choose a community">•••</div>
-                    <div class="communities">
-                        <div class="switches">
-                            <input class="urlFlag switch" type="checkbox" id="switch1" name="communities" value="all communities">
-                            <label for="switch1">all communities</label>
-                        </div>
-                        
-                        <div class="switches">
-                            <input class="urlFlag" type="checkbox" id="switch2" name="communities" value="biosyslit" checked=true>
-                            <label for="switch2">biosyslit</label>
-                        </div>
-                        
-                        <div class="switches">
-                            <input class="urlFlag" type="checkbox" id="switch3" name="communities" value="belgiumherbarium">
-                            <label for="switch3">belgiumherbarium</label>
-                        </div>
-
-                    </div>
-                </div>
-                
-                <div class="searchInputs">
-                    <!-- <input type="hidden" name="page" value="1">
-                    <input type="hidden" name="size" value="30"> -->
-                    <!-- <input type="hidden" name="id" value="0"> -->
-                    <input id="q" name="q" type="search" required placeholder="search for something">
-                    <input class="urlFlag" type="checkbox" name="refreshCache" value="true">
-                </div>
-
-                <button id="go-get-it" class="searchButton">go</button>
-                <div id="fSearch" class="off-none"></div>
-                <a id="searchChooser" class="searchChooser" href="">switch to fancy search</a>
-                <div id="refreshCacheWarning">This will refresh the cache; you probably don’t want this.</div>
-            </div>
-        </form>
     </div>
-
-    <div id="throbber" class="panel"></div>
+    <div id="throbber" class="panel hidden"></div>
 </header>
 
 <article class="grid-container full">
+    <section id="index" class="panel modal-text hidden">
+        <div id="articleTitleContainer">
+            <a href="/" class="title logo-intro"></a><br>
+            <a href="about.html#on" class="modal-open sub-title">about</a>
+        </div>
+        <div id="articleFormContainer"></div>
+    </section>
+
     <section id="maintenance" class="panel modal-text hidden">
         <h1>Closed for Maintenance</h1>
 
@@ -88,25 +76,25 @@
     </section>
     
     <section id="about" class="panel modal-text hidden">
-        <a href="#about" class="modal-close">close</a>
+        <a href="about.html#off" class="modal-close">close</a>
 
         <h1>About</h1>
 
-        <p>Ocellus is a frontend to the Biodiversity Literature Repository (BLR) with almost 200K images on <a href="https://zenodo.org" target="_blank">Zenodo</a>, more than 300K taxonomic treatments in <a href="http://treatmentbank.org" target="_blank">TreatmentBank</a>, and 800,000 citations on <a href="https://refbank.org" target="_blank">RefBank</a>. Ocellus depends on <a href="http://zenodeo.punkish.org" target="_blank">Zenodeo</a>, a <code>nodejs</code> API that queries, analyzes and aggregates results from these various repositories via a single, unified interface. Start typing in the search field and Ocellus will suggest from > 5100 taxonomic familes, and Ocellus will retrieve the results for you.</p>
+        <p><img src="img/blr-logo.50.png" width="50" alt="Biodiversity Literature Repository" align="left"> Ocellus is a frontend to the Biodiversity Literature Repository (BLR) with almost 200K images on <a href="https://zenodo.org" target="_blank">Zenodo</a>, more than 300K taxonomic treatments in <a href="http://treatmentbank.org" target="_blank">TreatmentBank</a>, and 800,000 citations on <a href="https://refbank.org" target="_blank">RefBank</a>. Ocellus depends on <a href="http://zenodeo.punkish.org" target="_blank">Zenodeo</a>, a <code>nodejs</code> API that queries, analyzes and aggregates results from these various repositories via a single, unified interface. Start typing in the search field and Ocellus will suggest from > 5100 taxonomic familes, and Ocellus will retrieve the results for you.</p>
 
-        <p>Check out our <a href="#privacy" class="modal-open">privacy policy</a> or <a href="#contact" class="modal-open">give us feedback</a>.</p>
+        <p>Check out our <a href="/privacy.html#on" class="modal-open">privacy policy</a> or <a href="contact.html#on" class="modal-open">give us feedback</a>.</p>
     </section>
     
     <section id="privacy" class="panel modal-text hidden">
-        <a href="#privacy" class="modal-close">close</a>
+        <a href="privacy.html#off" class="modal-close">close</a>
 
         <h1>Privacy</h1>
     
-        <p>We track nothing. What you do with the data here is not our business. Check out our policy on <a href="#ip" class="modal-open">intellectual property</a>.</p>
+        <p>We track nothing. What you do with the data here is not our business. Check out our policy on <a href="ip.html#on" class="modal-open">intellectual property</a>.</p>
     </section>
     
     <section id="ip" class="panel modal-text hidden">
-        <a href="#ip" class="modal-close">close</a>
+        <a href="ip.html#off" class="modal-close">close</a>
 
         <h1>Intellectual Property</h1>
 
@@ -114,11 +102,11 @@
 
         <p>If you use are our, please be nice and give us credit by citing us as follows: <cite>Biodiversity Literature Repository. 2018-. blah, blah. Plazi.</cite></p>
 
-        <p>The half-fish in the footer is based on the original of a Blunt-Nosed Minnow, <i>Pimephales notatus</i> (Rafinesque) ♂ from the <a href="https://archive.org/stream/cu31924090292669/#page/n1063/mode/1up">Internet Archive</a> and has no known copyright restrictions.</p>
+        <p>The half-fish in the footer is based on the original of a Blunt-Nosed Minnow, <i>Pimephales notatus</i> (Rafinesque) ♂ from the <a href="https://archive.org/stream/cu31924090292669/#page/n1063/mode/1up" target="_blank">Internet Archive</a> and has no known copyright restrictions.</p>
     </section>
     
     <section id="contact" class="panel modal-text hidden">
-        <a href="#contact" class="modal-close">close</a>
+        <a href="contact.html#off" class="modal-close">close</a>
 
         <h1>Contact</h1>
 
@@ -128,16 +116,16 @@
     <section id="treatments" class="panel hidden"></section>
 </article>
 
-<footer id="footer"><img src="img/fish.jpg"></footer>
+<footer class="grid-container full"><img src="img/fish.jpg"></footer>
 
 <!-- partials -->
 <script id="template-pager" type="x-tmpl-mustache">
-{{#pager}}
-<div id="pager">
-    {{#prev}}◀ <a href="{{prev}}" id="prev" class="pager">prev</a>{{/prev}}
-    {{#next}}<a href="{{next}}" id="next" class="pager">next</a> ▶{{/next}}
-</div>
-{{/pager}}
+    {{#pager}}
+    <div id="pager">
+        {{#prev}}◀ <a href="{{prev}}" id="prev" class="pager">prev</a>{{/prev}}
+        {{#next}}<a href="{{next}}" id="next" class="pager">next</a> ▶{{/next}}
+    </div>
+    {{/pager}}
 </script>
 
 <script id="template-records-found" type="x-tmpl-mustache">
@@ -145,17 +133,15 @@
 </script>
 
 <script id="template-charts" type="x-tmpl-mustache">
-<div class="js-tabs" id="tabs">
-    <ul class="js-tabs__header">
-        {{#statistics}}
-        <li><a href="#" class="js-tabs__title">{{chart-name}}</a></li>
-        {{/statistics}}
-    </ul>
-    
+<ul data-tabs>
     {{#statistics}}
-    <div class="js-tabs__content"><canvas class="chart"></canvas></div>
+    <li><a {{#default}}data-tabby-default{{/default}} href="#{{chart-id}}">{{chart-name}}</a></li>
     {{/statistics}}
-</div>
+</ul>
+
+{{#statistics}}
+<div id="{{chart-id}}"><canvas class="chart"></canvas></div>
+{{/statistics}}
 </script>
 
 <script id="template-figures" type="x-tmpl-mustache">
@@ -173,6 +159,48 @@
 </div>
 </script>
 <!-- end partials -->
+
+<script id="template-form" type="x-tmpl-mustache">
+<form name="simpleSearch" class="searchContainer" id="ssForm" method="GET">
+    <nav id="resourceSelector">
+        <label for="resource-treatments" class="searchFocus">treatments</label>
+        <input id="resource-treatments" class="urlFlag" type="radio" name="resource" value="treatments" checked=true>
+    </nav>
+
+    <div id="sSearch" class="searchWidget">
+        <div class="drop-down">
+            <div class="arrow-down" data-tooltip="choose a community">•••</div>
+            <div class="communities">
+                <div class="switches">
+                    <input class="urlFlag switch" type="checkbox" id="switch1" name="communities" value="all communities">
+                    <label for="switch1">all communities</label>
+                </div>
+                
+                <div class="switches">
+                    <input class="urlFlag" type="checkbox" id="switch2" name="communities" value="biosyslit" checked=true>
+                    <label for="switch2">biosyslit</label>
+                </div>
+                
+                <div class="switches">
+                    <input class="urlFlag" type="checkbox" id="switch3" name="communities" value="belgiumherbarium">
+                    <label for="switch3">belgiumherbarium</label>
+                </div>
+
+            </div>
+        </div>
+        
+        <div class="searchInputs">
+            <input id="q" name="q" type="search" required placeholder="search for something">
+            <input class="urlFlag" type="checkbox" name="refreshCache" value="true">
+        </div>
+
+        <button id="go-get-it" class="searchButton">go</button>
+        <div id="fSearch" class="off-none"></div>
+        <a id="searchChooser" class="searchChooser" href="">switch to fancy search</a>
+        <div id="refreshCacheWarning">This will refresh the cache; you probably don’t want this.</div>
+    </div>
+</form>
+</script>
 
 <script id="template-treatments" type="x-tmpl-mustache">
 {{#successful}}
@@ -246,6 +274,7 @@
                 </li>
                 {{/taxonStats}}
             </ul>
+
         </div>
     </details>
 
@@ -268,7 +297,7 @@
         </ul>
     </details>
 
-    <details class="xml">
+    <details open class="xml">
         <summary>Treatment Text</summary>
         <p class="xml">{{{xml}}}</p>
     </details>
@@ -299,17 +328,27 @@
 {{/successful}}
 </script>
 
-<script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js" 
-   integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og=="
-   crossorigin=""></script>
-   
-<script src="js/config.js"></script>
-<script src="js/scripts.min.js"></script>
+<script src="node_modules/chart.js/dist/Chart.min.js"></script>
+<script src="node_modules/chartjs-plugin-datalabels/dist/chartjs-plugin-datalabels.min.js"></script>
+<script src="JavaScript-autoComplete/auto-complete.min.js"></script>
+<script src="node_modules/tabbyjs/dist/js/tabby.polyfills.min.js"></script>
+<!-- 
+<script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js" integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og==" crossorigin=""></script>
+-->
+<script src="node_modules/leaflet/dist/leaflet.js"></script>
+<script src="js/mustache.min.js"></script>
 
-<script>
-window.onload = function(e){ 
-    OCELLUS.init();
-}
+<script src="js/config.js"></script>
+
+<script src="js/blr-base.js"></script>
+<script src="js/blr-eventlisteners.js"></script>
+<script src="js/blr-treatments.js"></script>
+<script src="js/blr-utils.js"></script>
+
+<script type="text/javascript">
+window.onload = function(e) {
+    BLR.base.init();
+};
 </script>
 </body>
 </html>

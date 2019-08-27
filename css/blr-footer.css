@@ -3,11 +3,10 @@
 /*****************************************/
 
 footer {
-    text-align: center;
-    padding: 0 !important;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
 }
 footer img {
-    width: 80%;
-    max-width: 480px;
-    margin: auto;
+    max-width: 280px;
 }

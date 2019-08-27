@@ -1,0 +1,7 @@
+[role="tab"][aria-selected="true"] {
+    border: none;
+    color: black;
+    text-transform: capitalize;
+    font-weight: bold;
+    font-size: larger;
+}

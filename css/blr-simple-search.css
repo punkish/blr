@@ -1,16 +1,22 @@
 /*****************************************/
 /* blr: form simple search               */
 /*****************************************/
-
-.searchContainer {
-    width: 100%;
-    margin-bottom: 10px;
+#ssForm {
+    margin-bottom: 0;
 }
 
 /*
 hide the searchChooser widget on screens 
 smaller than 375px width
 */
+.searchWidget {
+    width: 100%;
+    position: relative;
+    border: none;
+    clear: both;
+/*     display: table; */
+    margin: auto;
+}
 .searchChooser {
     font-size: 1rem;
     margin-left: 45px;
@@ -35,52 +41,34 @@ nav label.searchFocus {
 nav input[type="radio"] {
     display: none;
 }
-.searchWidget {
-    width: 100%;
-    position: relative;
-    border: none;
-    clear: both;
-    display: table;
-}
-.searchTopBar {
-    position: relative;
-}
-
-#sSearch .searchInputs,
-#fSearch .searchInputs {
-    width: calc( 100% - 90px );
+div.searchInputs {
     float: left;
-    background-color: white;
-    border: 1px solid #444;
-    padding: 0;
-}
-#sSearch .searchInputs {
+    width: calc(100% - 80px);
     height: 38px;
-}
-#fSearch .searchInputs {
-    height: auto;
+    line-height: 35px;
+    border: 1px solid;
+    background-color: white;
 }
 #q {
-    width: calc( 100% - 25px );
-    border: none;
-    border-radius: 0;
+    width: calc(100% - 40px);
     height: 36px;
+    float: left;
+    border: none;
 }
-#q::placeholder { /* Most modern browsers support this now. */
-    color: #444;
+#q::placeholder {
+    color: green;
 }
-.searchButton {
-    border-radius: 0 5px 5px 0;
-    background-color: #444;
+#q:focus {
+    outline: none;
+}
+button.searchButton {
+    float: right;
+    width: 40px !important;
+    padding: 0;
     border: 1px solid #444;
-    color: white !important;
-    padding-left: 12px;
-    height: 38px;
-    width: 40px;
-    position: relative;
-    font-size: unset;
-    line-height: unset;
-    margin-bottom: 0;
+    background-color: #444;
+    color: #fff;
+    border-radius: 0 5px 5px 0;
 }
 .searchButton:hover {
     background-color: green !important;

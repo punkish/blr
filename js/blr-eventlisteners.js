@@ -25,7 +25,6 @@ BLR.eventlisteners.modalOpen = function(event) {
     }
 
     // close all modals
-    //console.log(BLR.base.dom.panels)
     BLR.eventlisteners.toggle(BLR.base.dom.panels, 'off');
 
     //const id = event.target.hash.substr(1);
@@ -69,7 +68,29 @@ BLR.eventlisteners.turnOff = function(element) {
 BLR.eventlisteners.turnOn = function(element) {
     element.classList.add('visible');
     element.classList.remove('hidden');
-    history.pushState('', '', element.id);
+
+    const domsToUris = [
+        'about',
+        'privacy',
+        'ip',
+        'contact',
+        'index',
+        'treatments'
+    ];
+
+    if (domsToUris.indexOf(element.id) > -1) {
+        let url = element.id + '.html';
+
+        if (location.search) {
+            url = url + location.search;
+        }
+
+        if (location.hash) {
+            url = url + location.hash;
+        }
+
+        history.pushState('', '', url);
+    }
 };
 
 BLR.eventlisteners.toggle = function(elements, state) {

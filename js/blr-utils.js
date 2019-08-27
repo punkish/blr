@@ -166,7 +166,7 @@ BLR.utils.makeUris = function (queryObj, setHistory = true) {
         }
     }
 
-    const uri = `${BLR.zenodeo}/v2/${queryObj.resource}?${hrefArray1.join('&')}`;
+    const uri = `${BLR.base.zenodeo}/v2/${queryObj.resource}?${hrefArray1.join('&')}`;
 
     const search = hrefArray2.join('&');
 
@@ -182,10 +182,10 @@ BLR.utils.makeUris = function (queryObj, setHistory = true) {
 };
 
 BLR.utils.getResource = function(queryObj) {
-    const {search, uri} = BLR.makeUris(queryObj);
-
+    const {search, uri} = BLR.utils.makeUris(queryObj);
+    
     if (queryObj.resource === 'treatments') {
-        BLR.getTreatments(queryObj, search, uri);
+        BLR.treatments.getTreatments(queryObj, search, uri);
     }
     else if (queryObj.resource === 'images') {
         BLR.getImages(queryObj, search, uri);
@@ -229,10 +229,10 @@ BLR.utils.syntheticData = function(resource, queryObj) {
         }
     }
 
-    resource['records-found'] = BLR.niceNumbers(numOfRecords);
+    resource['records-found'] = BLR.utils.niceNumbers(numOfRecords);
     resource.resource = 'treatments';
     
-    resource['search-criteria'] = BLR.formatSearchCriteria(queryObj);
+    resource['search-criteria'] = BLR.utils.formatSearchCriteria(queryObj);
 
     resource.successful = true;
     resource.from = 'One';
@@ -268,8 +268,8 @@ BLR.utils.urlDeconstruct = function(s) {
         q.value = queryObject.q;
     }
 
-    const rtLabels = BLR.dom.resourceSelector.querySelectorAll('label');
-    const rtInputs = BLR.dom.resourceSelector.querySelectorAll('input');
+    const rtLabels = BLR.base.dom.resourceSelector.querySelectorAll('label');
+    const rtInputs = BLR.base.dom.resourceSelector.querySelectorAll('input');
 
     for (let i = 0; i < rtLabels.length; i++) {
         if (queryObject.resource === rtInputs[i].value) {
@@ -350,16 +350,16 @@ BLR.utils.goGetIt = function(event) {
             event.stopPropagation();
 
             // construct URL based on form fields
-            qp = BLR.urlConstruct(BLR.dom.form);
+            qp = BLR.utils.urlConstruct(BLR.dom.form);
         }
         else if (location.search) {
     
             // deconstruct URL based on location.search
-            qp = BLR.urlDeconstruct(location.search);
+            qp = BLR.utils.urlDeconstruct(location.search);
         }
 
-        BLR.toggle(BLR.dom.throbber, 'on');
-        BLR.getResource(qp);
+        BLR.eventlisteners.toggle(BLR.base.dom.throbber, 'on');
+        BLR.utils.getResource(qp);
     }
 };
 
@@ -403,8 +403,8 @@ BLR.utils.suggest = function(field) {
         minChars: 3,
         source: function(term, response) {
             try { fetch.abort() } catch(e) {}
-            fetch(`${zenodeo}/v2/families?q=${term}`)
-                .then(BLR.fetchReceive)
+            fetch(`${BLR.base.zenodeo}/v2/families?q=${term}`)
+                .then(BLR.utils.fetchReceive)
                 .then(response);
         }
     });

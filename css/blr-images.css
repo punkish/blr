@@ -194,16 +194,16 @@
     text-align: left;
 }
 /* Larger than mobile (default point when grid becomes active) */
-@media (min-width: 600px) {
+/* @media (min-width: 600px) {
     .masonry {
         -moz-column-count: 2;
         -webkit-column-count: 2;
         column-count: 2;
     }
-}
+} */
 
 /* Larger than phablet */
-@media (min-width: 900px) {
+/* @media (min-width: 900px) {
      .title {
         margin-left: 0rem;
     }
@@ -216,13 +216,13 @@
         -webkit-column-count: 3;
         column-count: 3;
     }
-}
+} */
 
 /* Larger than tablet */
-@media (min-width: 1200px) {
+/* @media (min-width: 1200px) {
     .masonry {
         -moz-column-count: 5;
         -webkit-column-count: 5;
         column-count: 5;
     }
-}
+} */

@@ -1,20 +1,31 @@
-/*****************************************/
-/* blr: article                          */
-/*****************************************/
-
 article {
     flex: 1 1 0%;
-    padding: 1rem;
     width: 100%;
     max-width: 960px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
+article.grid-container {
+    padding: 0 !important;
+}
+section#index {
+/*     border: 1px solid; */
+    margin-top: -20%;
+    margin: auto;
+    
+/*     width: 100%;
+    margin: auto;
+    padding: 0; */
+}
+/* section#index form > div {
+    height: 39px;
+    border-radius: 5px;
+} */
 article section {
+    /* margin-top: -20%; */
     padding: 2rem;
 }
 article section p {
     text-align: left;
-}
-.js-tabs {
-    width: 100%;
-    margin: 0;
 }

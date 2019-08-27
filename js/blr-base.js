@@ -2,7 +2,11 @@ if (typeof(BLR) === 'undefined' || typeof(BLR) !== 'object') {
     BLR = {};
 }
 
-BLR.base = {};
+if (!('base' in BLR)) {
+    BLR.base = {};
+}
+
+BLR.base.dom = {};
 
 BLR.base.templates = {
 
@@ -15,7 +19,11 @@ BLR.base.templates = {
 
     treatments: document.querySelector('#template-treatments').innerHTML,
     treatment: document.querySelector('#template-treatment').innerHTML,
-    images: document.querySelector('#template-images').innerHTML
+    images: document.querySelector('#template-images').innerHTML,
+
+    // not really templates but handled by Mustache
+    //logo: document.querySelector('#template-logo').innerHTML,
+    searchForm: document.querySelector('#template-form').innerHTML,
 };
 
 BLR['template-partials'] = {};
@@ -34,47 +42,68 @@ BLR.base.compileTemplates = function() {
     BLR['template-partials']['template-figures'] = BLR.base.templates.figures;
 };
 
-BLR.base.dom = {
+// When the page loads, the form and the logo don't exist in the dom.
+// Depending on whether the page is a first web visit for the user
+// or is a bookmark or an existing link being loaded, the form and the
+// logo are in different locations. So we first populgte the dom with 
+// everything except the form, and then insert the form 
+BLR.base.populateDom = function({withForm}) {
 
-    // modals
-    maintenance: document.querySelector('#maintenance'),
-    searchForm: document.querySelector('#home'),
-    about: document.querySelector('#about'),
-    privacy: document.querySelector('#privacy'),
-    ip: document.querySelector('#ip'),
-    contact: document.querySelector('#contact'),
-    panels: document.querySelectorAll('.panel'),
-    modalOpen: document.querySelectorAll('.modal-open'),
-    modalClose: document.querySelectorAll('.modal-close'),
-    throbber: document.querySelector('#throbber'),
+    if (withForm) {
 
-    // form elements
-    form: document.querySelector('form[name=simpleSearch]'),
-    inputs: document.querySelectorAll('form[name=simpleSearch] input'),
-    q: document.querySelector('input[name=q]'),
-    urlFlagSelectors: document.querySelectorAll('.urlFlag'),
-    resourceSelector: document.querySelector('#resourceSelector'),
-    goGetIt: document.querySelector('#go-get-it'),
-    communitiesSelector: document.querySelector('.drop-down'),
-    communityCheckBoxes: document.querySelectorAll('input[name=communities]'),
-    allCommunities: document.querySelector('input[value="all communities"]'),
-    refreshCacheSelector: document.querySelector('input[name=refreshCache]'),
-    urlFlagSelectors: document.querySelectorAll('.urlFlag'),
+        // form elements
+        BLR.base.dom.form = document.querySelector('form[name=simpleSearch]'),
+        BLR.base.dom.inputs = document.querySelectorAll('form[name=simpleSearch] input'),
+        BLR.base.dom.q = document.querySelector('input[name=q]'),
+        BLR.base.dom.urlFlagSelectors = document.querySelectorAll('.urlFlag'),
+        BLR.base.dom.resourceSelector = document.querySelector('#resourceSelector'),
+        BLR.base.dom.goGetIt = document.querySelector('#go-get-it'),
+        BLR.base.dom.communitiesSelector = document.querySelector('.drop-down'),
+        BLR.base.dom.communityCheckBoxes = document.querySelectorAll('input[name=communities]'),
+        BLR.base.dom.allCommunities = document.querySelector('input[value="all communities"]'),
+        BLR.base.dom.refreshCacheSelector = document.querySelector('input[name=refreshCache]'),
+        BLR.base.dom.urlFlagSelectors = document.querySelectorAll('.urlFlag'),
 
-    // results panels
-    treatments: document.querySelector('#treatments'),
-    bigmap: document.querySelector('#bigmap')
+        // logo 
+        BLR.base.dom.titleAnchor = document.querySelector('a.title');
+    }
+    else {
+        BLR.base.dom = {};
+
+        BLR.base.dom.header = document.querySelector('header'),
+        BLR.base.dom.headerTitleContainer = document.querySelector('#headerTitleContainer'),
+        BLR.base.dom.headerFormContainer = document.querySelector('#headerFormContainer'),
+        BLR.base.dom.articleTitleContainer = document.querySelector('#articleTitleContainer'),
+        BLR.base.dom.articleFormContainer = document.querySelector('#articleFormContainer'),
+
+        // not really templaes, but managed by Mustache nonetheless
+        //BLR.base.dom.logo = document.querySelector('#template-logo'),
+        BLR.base.dom.searchForm = document.querySelector('#template-form'),
+
+        // modals
+        BLR.base.dom.maintenance = document.querySelector('#maintenance'),
+        BLR.base.dom.index = document.querySelector('#index'),
+        BLR.base.dom.about = document.querySelector('#about'),
+        BLR.base.dom.privacy = document.querySelector('#privacy'),
+        BLR.base.dom.ip = document.querySelector('#ip'),
+        BLR.base.dom.contact = document.querySelector('#contact'),
+        BLR.base.dom.panels = document.querySelectorAll('.panel'),
+        BLR.base.dom.modalOpen = document.querySelectorAll('.modal-open'),
+        BLR.base.dom.modalClose = document.querySelectorAll('.modal-close'),
+        BLR.base.dom.throbber = document.querySelector('#throbber'),
+
+        // results panels
+        BLR.base.dom.treatments = document.querySelector('#treatments')
+    }
+    
 };
 
-BLR.base.saveable = ['treatments', 'home'],
+BLR.base.saveable = ['treatments', 'index'],
 
 BLR.base.savedState = null;
 
-BLR.base.model = {
-    treatments: {},
-    treatment: {},
-    images: {}
-}
+BLR.base.model = {};
+
 
 BLR.base.size = 30;
 
@@ -89,79 +118,68 @@ BLR.base.map = {
 BLR.base.init = function(state) {
     const {maintenance} = state || {maintenance: false};
     
-    // make sure all panels are hidden
-    BLR.eventlisteners.toggle(BLR.base.dom.panels, 'off');
-
     if (maintenance) {
+        BLR.base.populateDom();
+
+        // make sure all panels are hidden
+        BLR.eventlisteners.toggle(BLR.base.dom.panels, 'off');
         BLR.eventlisteners.toggle(BLR.base.dom.maintenance, 'on');
         return;
     }
     else {
-        BLR.eventlisteners.addEvents(BLR.base.dom.modalOpen, BLR.eventlisteners.modalOpen);
-        BLR.eventlisteners.addEvents(BLR.base.dom.modalClose, BLR.eventlisteners.modalClose);
-        BLR.eventlisteners.addEvents(BLR.base.dom.goGetIt, BLR.eventlisteners.goGetIt);
-        BLR.eventlisteners.addEvents(BLR.base.dom.communitiesSelector, BLR.eventlisteners.toggleCommunities);
-        BLR.eventlisteners.addEvents(BLR.base.dom.refreshCacheSelector, BLR.eventlisteners.toggleRefreshCache);
-        BLR.utils.suggest(BLR.base.dom.q);
-        BLR.utils.activateUrlFlagSelectors();
-
-        BLR.base.compileTemplates();
-
         if (location.search) {
-            //console.log('getting results based on location')
+
+            BLR.base.compileTemplates();
+            BLR.base.populateDom({withForm: false});
+    
+            // make sure all panels are hidden
+            BLR.eventlisteners.toggle(BLR.base.dom.panels, 'off');
+            
+            //BLR.base.dom.formContainer.innerHTML = Mustache.render(BLR.base.templates.searchForm, {});
+            //BLR.base.dom.headerTitleContainer.innerHTML = BLR.base.dom.logo.innerHTML;
+            BLR.base.dom.headerFormContainer.innerHTML = BLR.base.dom.searchForm.innerHTML;
+
+            BLR.base.populateDom({withForm: true});
+            
+            BLR.base.dom.header.classList.remove('hidden');
+            BLR.base.dom.header.classList.add('visible');
+            //BLR.base.dom.titleAnchor.classList.add('logo-header');
+
+            BLR.eventlisteners.addEvents(BLR.base.dom.modalOpen, BLR.eventlisteners.modalOpen);
+            BLR.eventlisteners.addEvents(BLR.base.dom.modalClose, BLR.eventlisteners.modalClose);
+            BLR.eventlisteners.addEvents(BLR.base.dom.goGetIt, BLR.eventlisteners.goGetIt);
+            BLR.eventlisteners.addEvents(BLR.base.dom.communitiesSelector, BLR.eventlisteners.toggleCommunities);
+            BLR.eventlisteners.addEvents(BLR.base.dom.refreshCacheSelector, BLR.eventlisteners.toggleRefreshCache);
+            BLR.utils.suggest(BLR.base.dom.q);
+            BLR.utils.activateUrlFlagSelectors();
+
             BLR.utils.goGetIt();
         }
         else {
-            //console.log('getting stats')
-            //BLR.getResource({resource: 'treatments'});
-            BLR.eventlisteners.toggle(BLR.base.dom.searchForm, 'on');
+            BLR.base.compileTemplates();
+            BLR.base.populateDom({withForm: false});
+    
+            // make sure all panels are hidden
+            BLR.eventlisteners.toggle(BLR.base.dom.panels, 'off');
+            
+            // insert the form in article.section#index
+            //BLR.base.dom.articleTitleContainer.innerHTML = BLR.base.dom.logo.innerHTML;
+            BLR.base.dom.articleFormContainer.innerHTML = BLR.base.dom.searchForm.innerHTML;
+
+            BLR.base.populateDom({withForm: true});
+
+            //BLR.base.dom.titleAnchor.classList.add('logo-intro');
+            BLR.eventlisteners.toggle(BLR.base.dom.index, 'on');
+            
+            BLR.eventlisteners.addEvents(BLR.base.dom.modalOpen, BLR.eventlisteners.modalOpen);
+            BLR.eventlisteners.addEvents(BLR.base.dom.modalClose, BLR.eventlisteners.modalClose);
+            BLR.eventlisteners.addEvents(BLR.base.dom.goGetIt, BLR.eventlisteners.goGetIt);
+            BLR.eventlisteners.addEvents(BLR.base.dom.communitiesSelector, BLR.eventlisteners.toggleCommunities);
+            BLR.eventlisteners.addEvents(BLR.base.dom.refreshCacheSelector, BLR.eventlisteners.toggleRefreshCache);
+            BLR.utils.suggest(BLR.base.dom.q);
+            BLR.utils.activateUrlFlagSelectors();
+            
             BLR.base.dom.q.focus();
         }
     }
 };
-
-/*
-map = {
-    base: [
-        'templates',
-        'template-partials',
-        'compileTemplates',
-        'dom',
-        'saveable',
-        'model',
-        'size',
-        'init'
-    ],
-
-    utils: [
-        'statsChart',
-        'niceNumbers',
-        'formatSearchCriteria',
-        'makeUris',
-        'getResource',
-        'syntheticData',
-        'fetchReceive',
-        'isXml',
-        'urlDeconstruct',
-        'urlConstruct',
-        'makePager',
-        'goGetIt'
-    ],
-
-    treatments: [
-        'getOneTreatment',
-        'getManyTreatments',
-        'getTreatments',
-        'makeMap'
-    ],
-
-    eventlisterners: [
-        'modalOpen',
-        'modalClose',
-        'addEvents',
-        'turnOff',
-        'turnOn',
-        'toggle'
-    ]
-}
-*/
