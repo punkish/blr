@@ -231,6 +231,7 @@ BLR.utils.chooseUrlFlags = function (element) {
         for (let i = 0; i < labels.length; i++) {
             if (element.value === inputs[i].value) {
                 labels[i].classList.add('searchFocus');
+                BLR.utils.setPlaceHolder(element.value);
             }
             else {
                 labels[i].classList.remove('searchFocus');
@@ -242,6 +243,9 @@ BLR.utils.chooseUrlFlags = function (element) {
     }
 };
 
+BLR.utils.setPlaceHolder = function(resource) {
+    BLR.base.dom.q.placeholder = `search for ${resource}`;
+};
 
 /* link load **********************/
 BLR.utils.linkLoad = function() {
@@ -257,20 +261,7 @@ BLR.utils.linkLoad = function() {
 
         // construct Zenodeo URI
         const zenodeoUri = BLR.utils.makeZenodeoUriFromLoc();
-        BLR.utils.foo(zenodeoUri);
-    }
-};
-
-// common *************************/
-BLR.utils.foo = function(uri) {
-    console.log(uri)
-
-    // get resources
-    if (BLR.base.resource === 'treatments') {
-        BLR.treatments.getTreatments(uri);
-    }
-    else if (BLR.base.resource === 'images') {
-        BLR.images.getImages(uri);
+        BLR.utils.loadResource(zenodeoUri);
     }
 };
 
@@ -360,11 +351,9 @@ BLR.utils.loadModal = function(mode) {
 
         // set resource and get basic stats to set the placeholder
         BLR.base.resource = BLR.base.defaultResource;
-    
+        BLR.utils.setPlaceHolder(BLR.base.resource);
+        //const zenodeoUri = BLR.utils.makeZenodeoUriFromLoc();
         BLR.utils.turnOnById('index');
-
-        // TODO
-        //BLR.base.dom.q.placeholder = `search ${BLR.base.model[BLR.base.resource].statistics.total} ${BLR.base.resource}`;
         BLR.base.dom.q.focus();
     }
 
@@ -374,26 +363,35 @@ BLR.utils.loadModal = function(mode) {
     }
 };
 
-BLR.utils.loadResource = function(resource) {
-    BLR.base.resource = resource;
-    BLR.base.model[BLR.base.resource] = BLR.utils.getResource(uri);
-
-    if (location.search) {
-
-        BLR.base.dom[BLR.base.resource].charts.innerHTML = Mustache.render(
-            BLR.base.templates.partials.charts, 
-            BLR.base.model[BLR.base.resource].statistics,
-            {}
-        );
-
-        BLR.utils.statsChart(BLR.base.resource, BLR.base.model[BLR.base.resource].statistics);
-        const tabs = new Tabby('[data-tabs]');
+BLR.utils.loadResource = function(uri) {
+    if (BLR.base.resource === 'treatments') {
+        BLR.treatments.getTreatments(uri);
     }
-
-    BLR.utils.turnOnById(loc);
-    BLR.base.dom.q.placeholder = `search ${BLR.base.model[BLR.base.resource].statistics.total} ${BLR.base.resource}`;
-    BLR.base.dom.q.focus();
+    else if (BLR.base.resource === 'images') {
+        BLR.images.getImages(uri);
+    }
 };
+
+// BLR.utils.loadResource = function(resource) {
+//     BLR.base.resource = resource;
+//     BLR.base.model[BLR.base.resource] = BLR.utils.getResource(uri);
+
+//     if (location.search) {
+
+//         BLR.base.dom[BLR.base.resource].charts.innerHTML = Mustache.render(
+//             BLR.base.templates.partials.charts, 
+//             BLR.base.model[BLR.base.resource].statistics,
+//             {}
+//         );
+
+//         BLR.utils.statsChart(BLR.base.resource, BLR.base.model[BLR.base.resource].statistics);
+//         const tabs = new Tabby('[data-tabs]');
+//     }
+
+//     BLR.utils.turnOnById(loc);
+//     BLR.base.dom.q.placeholder = `search ${BLR.base.model[BLR.base.resource].statistics.total} ${BLR.base.resource}`;
+//     BLR.base.dom.q.focus();
+// };
 
 BLR.utils.formatAuthorsList = function(treatmentAuthors) {
 

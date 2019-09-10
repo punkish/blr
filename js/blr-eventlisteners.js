@@ -73,86 +73,6 @@ BLR.eventlisteners.closeModal = function(event) {
     }
 };
 
-// BLR.eventlisteners.goGetItOld = function(event) {
-//     event.stopPropagation();
-//     event.preventDefault();
-    
-//     const form = event.target.form;
-//     const q = form.querySelector('input[name=q]');
-//     let resource = '';
-
-//     if (q.value === '') {
-//         q.placeholder = "c’mon, enter something";
-//         return;
-//     }
-//     else {
-
-//         // create a URI for the browser (history)
-//         const sendableUriValid = ['communities', 'q', 'refreshCache', 'page', 'size'];
-//         const browserUriInvalid = ['refreshCache'];
-//         const searchCriteriaInvalid = ['communities', 'refreshCache', 'size', 'page', 'go'];
-
-//         const inputs = form.querySelectorAll('input');
-
-//         const sendableUriParts = []; 
-//         const browserUriParts = [];
-//         const searchCriteriaParts = [];
-
-//         for (let i = 0, j = inputs.length; i < j; i++) {
-
-//             // for the URI to be sent to Zenodeo
-//             if (sendableUriValid.includes(inputs[i].name)) {
-//                 if (inputs[i].value) {
-//                     sendableUriParts.push(inputs[i].name + '=' + inputs[i].value);
-//                 }
-//             }
-//             else if (inputs[i].name === 'resource' && inputs[i].checked) {
-//                 resource = inputs[i].value;
-//             }
-
-//             // for the URI for the web browser (history)
-//             if (!browserUriInvalid.includes(inputs[i].name)) {
-//                 if (inputs[i].value) {
-//                     browserUriParts.push(inputs[i].name + '=' + inputs[i].value);
-//                 }
-//             }
-
-//             // create the searchCriteria string
-//             if (!searchCriteriaInvalid.includes(inputs[i].name)) {
-//                 if (inputs[i].name === 'q') {
-//                     searchCriteriaParts.push(`<span class="crit-val">${inputs[i].value}</span> is in the text`);
-//                 }
-//                 else {
-//                     searchCriteriaParts.push(`<span class="crit-key">${inputs[i].name}</span> is <span class="crit-val">${inputs[i].value}</span>`);
-//                 }
-//             }
-//         }
-
-//         const sendableUri = `${BLR.base.zenodeo}/v2/${resource}?${sendableUriParts.join('&')}`;
-
-//         const browserUri = resource + '.html?' + browserUriParts.join('&');
-//         history.pushState('', '', browserUri);
-
-//         let l = searchCriteriaParts.length;
-//         //let sc = `${n} ${resource} found where `;
-//         let searchCriteria = ''
-
-//         if (l === 1) {
-//             searchCriteria += searchCriteriaParts[0];
-//         }
-//         else if (l === 2) {
-//             searchCriteria +=  searchCriteriaParts.join(' and ');
-//         }
-//         else if (l > 2) {
-//             l = l - 1;
-//             searchCriteria += searchCriteriaParts.slice(0, l).join(', ') + ', and ' + searchCriteriaParts[l];
-//         }
-
-        
-//         //BLR.utils.foo({uri: sendableUri, searchCriteria: searchCriteria});
-//     }
-// };
-
 BLR.eventlisteners.goHome = function(event) {
     event.stopPropagation();
     event.preventDefault();
@@ -179,7 +99,6 @@ BLR.eventlisteners.activateUrlFlagSelectors = function() {
     }
 };
 
-/* event **************************/
 BLR.eventlisteners.goGetIt = function(event) {
     event.stopPropagation();
     event.preventDefault();
@@ -197,7 +116,7 @@ BLR.eventlisteners.goGetIt = function(event) {
 
     // construct Zenodeo URI from fields
     const zenodeoUri = BLR.utils.makeZenodeoUriFromInputs();
-    BLR.utils.foo(zenodeoUri);
+    BLR.utils.loadResource(zenodeoUri);
 };
 
 BLR.eventlisteners.toggleFigcaption = function(event) {

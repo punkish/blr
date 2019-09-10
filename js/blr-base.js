@@ -82,7 +82,7 @@ BLR.base.resources = Array.from(BLR.base.dom.resources).map(m => m.id);
 
 BLR.base.resource = '';
 
-BLR.base.defaultResource = 'treatments';
+BLR.base.defaultResource = 'images';
 BLR.base.figcaptionHeight = '30px';
 BLR.base.figcaptions = []; 
 BLR.base.savedPanel = {
@@ -104,7 +104,6 @@ BLR.base.compileTemplates = function() {
         Mustache.parse(BLR.base.templates.partials[t]);
     }
 };
-
 
 BLR.base.init = function() {
     BLR.base.compileTemplates();

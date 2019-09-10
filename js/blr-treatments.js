@@ -2,140 +2,139 @@ if (typeof(BLR) === 'undefined' || typeof(BLR) !== 'object') BLR = {};
 
 if (!('treatments' in BLR)) BLR.treatments = {};
 
-BLR.treatments.getOneTreatment = function(uri, search) {
-    
+BLR.treatments.getOneTreatment = function(uri) {
     fetch(uri)
         .then(BLR.utils.fetchReceive)
         .then(function(res) {    
             BLR.base.model.treatment = res.value;
-
             if (uri.indexOf('xml') > -1) {
-                return BLR.model.treatment;
+                return BLR.base.model.treatment;
             }
-
             else {
-                BLR.base.model.treatment.imgCount = BLR.utils.niceNumbers(BLR.base.model.treatment.imgCount);
-                BLR.base.model.treatment.zenodeo = BLR.base.zenodeo;
-
-                if (BLR.base.model.treatment['related-records'].materialsCitations.length) {
-                    BLR.base.model.treatment.materialsCitations = BLR.base.model.treatment['related-records'].materialsCitations;
-                    BLR.base.model.treatment.mapState = 'open';
-                }
-
-                if (BLR.base.model.treatment['related-records'].bibRefCitations.length) {
-                    BLR.base.model.treatment.bibRefCitations = BLR.base.model.treatment['related-records'].bibRefCitations;
-                    BLR.base.model.treatment.bibRefCitationsState = 'open';
-                }
-
-                if (BLR.base.model.treatment['related-records'].figureCitations.length) {
-                    BLR.base.model.treatment.figureCitations = BLR.base.model.treatment['related-records'].figureCitations;
-                    BLR.base.model.treatment.figureCitationsState = 'open';
-                }
-
-                if (BLR.base.model.treatment['related-records'].treatmentAuthors.length) {
-                    BLR.base.model.treatment.treatmentAuthors = BLR.base.model.treatment['related-records'].treatmentAuthors;
-                    BLR.base.model.treatment.treatmentAuthorsList = BLR.utils.formatAuthorsList(BLR.base.model.treatment['related-records'].treatmentAuthors);
-                }
-                
-                BLR.base.dom.treatment.results.innerHTML = Mustache.render(
-                    BLR.base.templates.wholes.treatment, 
-                    BLR.base.model.treatment,
-                    BLR.base.templates.partials
-                );        
-
-                if (BLR.base.model.treatment.imgCount !== 'Zero') {
-                    const figs = document.querySelectorAll('figcaption > a');
-                    // const reporters = document.querySelectorAll('.report');
-                    // const submitters = document.querySelectorAll('.submit');
-                    // const cancellers = document.querySelectorAll('.cancel');
-                    
-                    for (let i = 0, j = figs.length; i < j; i++) {
-                        figs[i].addEventListener('click', BLR.utils.toggleFigcaption);
-                        // reporters[i].addEventListener('click', toggleReporter);
-                        // submitters[i].addEventListener('click', submitReporter);
-                        // cancellers[i].addEventListener('click', cancelReporter);
-                    }
-                }
-
-                if (BLR.base.model.treatment['related-records'].materialsCitations.length) {
-                    BLR.treatments.makeMap(BLR.base.model.treatment.materialsCitations);
-                }
-                
-
-                BLR.utils.turnOffAll();
-                BLR.eventlisteners.toggle(BLR.base.dom.throbber, 'off');
-                BLR.eventlisteners.toggle(BLR.base.dom.treatment.section, 'on');
-                BLR.base.map.leaflet.invalidateSize();
+                BLR.treatments.loadOneTreatment(BLR.base.model);
             }
-
         });
 };
 
-BLR.treatments.getManyTreatments = function(uri) {
+BLR.treatments.loadOneTreatment = function(data) {
+    data.treatment.imgCount = BLR.utils.niceNumbers(data.treatment.imgCount);
+    data.treatment.zenodeo = BLR.base.zenodeo;
 
+    if (data.treatment['related-records'].materialsCitations.length) {
+        data.treatment.materialsCitations = data.treatment['related-records'].materialsCitations;
+        data.treatment.mapState = 'open';
+    }
+
+    if (data.treatment['related-records'].bibRefCitations.length) {
+        data.treatment.bibRefCitations = data.treatment['related-records'].bibRefCitations;
+        data.treatment.bibRefCitationsState = 'open';
+    }
+
+    if (data.treatment['related-records'].figureCitations.length) {
+        data.treatment.figureCitations = data.treatment['related-records'].figureCitations;
+        data.treatment.figureCitationsState = 'open';
+    }
+
+    if (data.treatment['related-records'].treatmentAuthors.length) {
+        data.treatment.treatmentAuthors = data.treatment['related-records'].treatmentAuthors;
+        data.treatment.treatmentAuthorsList = BLR.utils.formatAuthorsList(data.treatment['related-records'].treatmentAuthors);
+    }
+    
+    BLR.base.dom.treatment.results.innerHTML = Mustache.render(
+        BLR.base.templates.wholes.treatment, 
+        data.treatment,
+        BLR.base.templates.partials
+    );        
+
+    if (data.treatment.imgCount !== 'Zero') {
+        const figs = document.querySelectorAll('figcaption > a');
+        // const reporters = document.querySelectorAll('.report');
+        // const submitters = document.querySelectorAll('.submit');
+        // const cancellers = document.querySelectorAll('.cancel');
+        
+        for (let i = 0, j = figs.length; i < j; i++) {
+            figs[i].addEventListener('click', BLR.utils.toggleFigcaption);
+            // reporters[i].addEventListener('click', toggleReporter);
+            // submitters[i].addEventListener('click', submitReporter);
+            // cancellers[i].addEventListener('click', cancelReporter);
+        }
+    }
+
+    if (data.treatment['related-records'].materialsCitations.length) {
+        BLR.treatments.makeMap(data.treatment.materialsCitations);
+    }
+    
+
+    BLR.utils.turnOffAll();
+    BLR.eventlisteners.toggle(BLR.base.dom.throbber, 'off');
+    BLR.eventlisteners.toggle(BLR.base.dom.treatment.section, 'on');
+    BLR.base.map.leaflet.invalidateSize();
+};
+
+BLR.treatments.loadManyTreatments = function(data) {
+    if (data.treatments['num-of-records']) {
+
+        data.treatments.resource = 'treatments';
+
+        if (data.treatments['num-of-records'] > 0) {
+            if (data.treatments.records && data.treatments.records.length) {
+                data.treatments.successful = true;
+                data.treatments['num-of-records'] = BLR.utils.niceNumbers(data.treatments['num-of-records']);
+                data.treatments.from = BLR.utils.niceNumbers(data.treatments.from);
+
+                if (data.treatments.to < 10) {
+                    data.treatments.to = BLR.utils.niceNumbers(data.treatments.to).toLowerCase();
+                }
+                
+                data.treatments['search-criteria-text'] = BLR.utils.formatSearchCriteria(
+                    data.treatments['search-criteria'],
+                    data.treatments['num-of-records'],
+                    'treatments'
+                );
+                
+                BLR.utils.makePager(data.treatments);
+            }
+            else {
+                data.treatments.successful = false;
+            }
+            
+            BLR.base.dom.treatments.results.innerHTML = Mustache.render(
+                BLR.base.templates.wholes.treatments, 
+                data.treatments,
+                BLR.base.templates.partials
+            );
+
+            
+            //BLR.utils.statsChart(data.treatments.statistics);
+            //BLR.makeMap(BLR.model.treatments.map);
+            //const tabs = new Tabby('[data-tabs]');
+ 
+            //tabs.open(1);
+        }
+        else {
+            data.treatments.successful = false;
+            data.treatments['num-of-records'] = 'No';
+
+            BLR.base.dom.treatments.results.innerHTML = Mustache.render(
+                BLR.base.templates.wholes.treatments, 
+                data.treatments,
+                BLR.base.templates.partials
+            );
+        }
+
+    }
+
+    BLR.utils.turnOffAll();
+    BLR.eventlisteners.toggle(BLR.base.dom.throbber, 'off');
+    BLR.eventlisteners.toggle(BLR.base.dom.treatments.section, 'on');
+};
+
+BLR.treatments.getManyTreatments = function(uri) {
     fetch(uri)
         .then(BLR.utils.fetchReceive)
         .then(function(res) {
-
-            
             BLR.base.model.treatments = res.value;
-
-            if (BLR.base.model.treatments['num-of-records']) {
-
-                BLR.base.model.treatments.resource = 'treatments';
-
-                if (BLR.base.model.treatments['num-of-records'] > 0) {
-                    if (BLR.base.model.treatments.records && BLR.base.model.treatments.records.length) {
-                        BLR.base.model.treatments.successful = true;
-                        BLR.base.model.treatments['num-of-records'] = BLR.utils.niceNumbers(BLR.base.model.treatments['num-of-records']);
-                        BLR.base.model.treatments.from = BLR.utils.niceNumbers(BLR.base.model.treatments.from);
-
-                        if (BLR.base.model.treatments.to < 10) {
-                            BLR.base.model.treatments.to = BLR.utils.niceNumbers(BLR.base.model.treatments.to).toLowerCase();
-                        }
-                        
-                        BLR.base.model.treatments['search-criteria-text'] = BLR.utils.formatSearchCriteria(
-                            BLR.base.model.treatments['search-criteria'],
-                            BLR.base.model.treatments['num-of-records'],
-                            'treatments'
-                        );
-                        
-                        BLR.utils.makePager(BLR.base.model.treatments);
-                    }
-                    else {
-                        BLR.base.model.treatments.successful = false;
-                    }
-                    
-                    BLR.base.dom.treatments.results.innerHTML = Mustache.render(
-                        BLR.base.templates.wholes.treatments, 
-                        BLR.base.model.treatments,
-                        BLR.base.templates.partials
-                    );
-
-                    
-                    //BLR.utils.statsChart(BLR.base.model.treatments.statistics);
-                    //BLR.makeMap(BLR.model.treatments.map);
-                    //const tabs = new Tabby('[data-tabs]');
-         
-                    //tabs.open(1);
-                }
-                else {
-                    BLR.base.model.treatments.successful = false;
-                    BLR.base.model.treatments['num-of-records'] = 'No';
-
-                    BLR.base.dom.treatments.results.innerHTML = Mustache.render(
-                        BLR.base.templates.wholes.treatments, 
-                        BLR.base.model.treatments,
-                        BLR.base.templates.partials
-                    );
-                }
-
-            }
-
-            BLR.utils.turnOffAll();
-            BLR.eventlisteners.toggle(BLR.base.dom.throbber, 'off');
-            BLR.eventlisteners.toggle(BLR.base.dom.treatments.section, 'on');
-            
+            BLR.treatments.loadManyTreatments(BLR.base.model);
         });
 };
 
@@ -143,13 +142,11 @@ BLR.treatments.getTreatments = function(uri) {
 
     // single treatment
     if (uri.indexOf('treatmentId') > -1) {
-        //console.log('getting a single treatment ' + queryObj.treatmentId);
         BLR.treatments.getOneTreatment(uri);
     }
     
     // many treatments
     else {
-        //console.log('getting many treatments from ' + uri);
         BLR.treatments.getManyTreatments(uri);
     }
 };
