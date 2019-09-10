@@ -1,12 +1,5 @@
-/*****************************************/
-/* blr: footer                           */
-/*****************************************/
-
-footer {
-    display: flex !important;
-    align-items: center;
-    justify-content: center;
-}
 footer img {
+    width: 100%;
     max-width: 280px;
+    position: absolute;
 }

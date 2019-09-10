@@ -1,8 +1,6 @@
-if (typeof(BLR) === 'undefined' || typeof(BLR) !== 'object') {
-    BLR = {};
-}
+if (typeof(BLR) === 'undefined' || typeof(BLR) !== 'object') BLR = {};
 
-BLR.treatments = {};
+if (!('treatments' in BLR)) BLR.treatments = {};
 
 BLR.treatments.getOneTreatment = function(uri, search) {
     
@@ -39,10 +37,10 @@ BLR.treatments.getOneTreatment = function(uri, search) {
                     BLR.base.model.treatment.treatmentAuthorsList = BLR.utils.formatAuthorsList(BLR.base.model.treatment['related-records'].treatmentAuthors);
                 }
                 
-                BLR.base.dom.treatments.innerHTML = Mustache.render(
-                    BLR.base.templates.treatment, 
+                BLR.base.dom.treatment.results.innerHTML = Mustache.render(
+                    BLR.base.templates.wholes.treatment, 
                     BLR.base.model.treatment,
-                    BLR['template-partials']
+                    BLR.base.templates.partials
                 );        
 
                 if (BLR.base.model.treatment.imgCount !== 'Zero') {
@@ -60,27 +58,28 @@ BLR.treatments.getOneTreatment = function(uri, search) {
                 }
 
                 if (BLR.base.model.treatment['related-records'].materialsCitations.length) {
-                    //document.querySelector('#map').classList.add('show');
                     BLR.treatments.makeMap(BLR.base.model.treatment.materialsCitations);
                 }
+                
 
+                BLR.utils.turnOffAll();
                 BLR.eventlisteners.toggle(BLR.base.dom.throbber, 'off');
-                BLR.eventlisteners.toggle(BLR.base.dom.treatments, 'on');
+                BLR.eventlisteners.toggle(BLR.base.dom.treatment.section, 'on');
                 BLR.base.map.leaflet.invalidateSize();
             }
 
         });
 };
 
-BLR.treatments.getManyTreatments = function(uri, search) {
+BLR.treatments.getManyTreatments = function(uri) {
 
     fetch(uri)
         .then(BLR.utils.fetchReceive)
         .then(function(res) {
+
             
             BLR.base.model.treatments = res.value;
-            //BLR.base.model.treatments = foo;
-            //console.log(BLR.base.model)
+
             if (BLR.base.model.treatments['num-of-records']) {
 
                 BLR.base.model.treatments.resource = 'treatments';
@@ -95,59 +94,63 @@ BLR.treatments.getManyTreatments = function(uri, search) {
                             BLR.base.model.treatments.to = BLR.utils.niceNumbers(BLR.base.model.treatments.to).toLowerCase();
                         }
                         
-                        BLR.base.model.treatments['search-criteria-text'] = BLR.utils.formatSearchCriteria(BLR.base.model.treatments['search-criteria']);
-                        BLR.utils.makePager(BLR.base.model.treatments, search, false);
+                        BLR.base.model.treatments['search-criteria-text'] = BLR.utils.formatSearchCriteria(
+                            BLR.base.model.treatments['search-criteria'],
+                            BLR.base.model.treatments['num-of-records'],
+                            'treatments'
+                        );
+                        
+                        BLR.utils.makePager(BLR.base.model.treatments);
                     }
                     else {
                         BLR.base.model.treatments.successful = false;
                     }
                     
-                    BLR.base.dom.treatments.innerHTML = Mustache.render(
-                        BLR.base.templates.treatments, 
+                    BLR.base.dom.treatments.results.innerHTML = Mustache.render(
+                        BLR.base.templates.wholes.treatments, 
                         BLR.base.model.treatments,
-                        BLR['template-partials']
+                        BLR.base.templates.partials
                     );
 
                     
-                    BLR.utils.statsChart(BLR.base.model.treatments.statistics);
+                    //BLR.utils.statsChart(BLR.base.model.treatments.statistics);
                     //BLR.makeMap(BLR.model.treatments.map);
-                    const tabs = new Tabby('[data-tabs]');
+                    //const tabs = new Tabby('[data-tabs]');
          
                     //tabs.open(1);
-                    
-                    BLR.base.dom.q.placeholder = `search ${BLR.base.model.treatments['num-of-records']} treatments`;
                 }
                 else {
                     BLR.base.model.treatments.successful = false;
                     BLR.base.model.treatments['num-of-records'] = 'No';
 
-                    BLR.base.dom.treatments.innerHTML = Mustache.render(
-                        BLR.base.templates.treatments, 
+                    BLR.base.dom.treatments.results.innerHTML = Mustache.render(
+                        BLR.base.templates.wholes.treatments, 
                         BLR.base.model.treatments,
-                        BLR.base['template-partials']
+                        BLR.base.templates.partials
                     );
                 }
 
             }
 
+            BLR.utils.turnOffAll();
             BLR.eventlisteners.toggle(BLR.base.dom.throbber, 'off');
-            BLR.eventlisteners.toggle(BLR.base.dom.treatments, 'on');
+            BLR.eventlisteners.toggle(BLR.base.dom.treatments.section, 'on');
             
         });
 };
 
-BLR.treatments.getTreatments = function(queryObj, search, uri) {
+BLR.treatments.getTreatments = function(uri) {
 
     // single treatment
-    if (queryObj.treatmentId) {
+    if (uri.indexOf('treatmentId') > -1) {
         //console.log('getting a single treatment ' + queryObj.treatmentId);
-        BLR.treatments.getOneTreatment(uri, search);
+        BLR.treatments.getOneTreatment(uri);
     }
     
     // many treatments
     else {
         //console.log('getting many treatments from ' + uri);
-        BLR.treatments.getManyTreatments(uri, search);
+        BLR.treatments.getManyTreatments(uri);
     }
 };
 

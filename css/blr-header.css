@@ -1,57 +1,37 @@
 /*****************************************/
-/* blr: base styles                      */
+/* blr: header                           */
 /*****************************************/
 
-header {
-    border-bottom: 1px solid grey;
-    line-height: initial;
+header > div > div {
+    margin: auto;
+    width: 110px;
 }
-#headerTitleContainer {
-    padding-top: 10px;
-    text-align: center;
-}
-#headerTitleContainer img {
-    margin-bottom: -10px;
-}
-#headerTitleContainer a.title {
-    display: inline-flex;
-    margin-bottom: -10px;
-}
-#headerTitleContainer a.sub-title {
-    margin-top: -20px;
-    margin-left: 8px;
-}
-header div.container div.row {
-    gap: 0;
-    padding: 0;
-}
-#headerFormContainer {
-    padding-top: 1rem;
-}
-#articleTitleContainer {
-    margin-bottom: 20px;
-}
-#articleTitleContainer a.title {
-    display: inline-flex;
-    margin-left: -20px;
-    margin-bottom: -20px;
-}
-#articleTitleContainer a.sub-title {
-    margin-left: -10px;
-}
-a.logo-intro {
+.titleContainer .title {
     background-image: url(/img/blr-logo.100.png);
     background-repeat: no-repeat;
     background-size: 100%;
-    width: 101px;
-    height: 101px;
-/*     margin: 0 auto -30px auto; */
+    display: block;
+    width: 100px;
+    height: 100px;
 }
-a.logo-header {
-    background-image: url(/img/blr-logo.50.png);
-    background-repeat: no-repeat;
-    background-size: 100%;
-    width: 51px;
-    height: 51px;
-    margin: 15px auto -25px auto;
+
+/* Larger than mobile (default point when grid becomes active) */
+@media (min-width: 600px) {
+    header > div {
+        width: 500px;
+    }
+}
+    
+/* Larger than phablet */
+@media (min-width: 900px) {
+    header > div {
+        width: 600px;
+    }
+}
+
+/* Larger than tablet */
+@media (min-width: 1200px) {
+    header > div {
+        width: 900px;
+    }
 }

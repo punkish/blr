@@ -1,11 +1,14 @@
-/*****************************************/
-/* blr: base styles                      */
-/*****************************************/
-
+/* base */
 html {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
+
+    --button-width: 40px;
+
+    /* tabby */
+    --border-color-tab: silver;
+    --border-color-tab-selected: #f5f5f5;
 }
 *, *:before, *:after {
     -webkit-box-sizing: inherit;
@@ -27,4 +30,12 @@ a {
 }
 .visible {
     display: block;
+}
+/* search results */
+.crit-key {
+    font-weight: bold;
+}
+.crit-val {
+    font-style: italic;
+    font-family: serif;
 }
