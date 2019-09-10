@@ -359,7 +359,8 @@ BLR.utils.loadModal = function(mode) {
 
     // modals other than 'index'
     else {
-        BLR.utils.turnOnById(loc);
+        BLR.utils.turnOffAll();
+        BLR.utils.turnOnById(mode);
     }
 };
 
